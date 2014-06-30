@@ -10,18 +10,22 @@ App:
  - Phase 3
    - browserify
    - Use browserify with commonjs way of getting deps
+   - get in jquery and bootstrap (external or included?)
+   - check debugging (source maps??)
  - Phase 4
    - JS code spread across multiple directories
    - gulp: concat, watch, uglify, dev vs prod
  - Phase 5
+   - Incremental builds (do less work)
+ - Phase 6
    - test specs to come in
    - gulp: karma, coverage, ci, debugging
- - Phase 6
+ - Phase 7
    - multiple pages to get loaded (index.html, other.html, etc)
      - separate source for each
      - separate css deps for each (maybe)
    - gulp: multiple "apps"
- - Phase 7
+ - Phase 8
    - angular support for interaction and doing stuff (add item to page from text box)
    - gulp: angular deps, angular ui, angular bootstrap
 

@@ -1,5 +1,8 @@
+var common = require('lib/common');
+
 app = {
-   doSomething: function() {
-      console.log('doing something');
+   run: function() {
+      console.log('Starting');
+      common.printStuff();
    }
 };
