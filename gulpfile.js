@@ -2,6 +2,7 @@
 "use strict";
 
 var gulp        = require('gulp'),
+    es          = require('event-stream'),
     clean       = require('gulp-rimraf'),
     compass     = require('gulp-compass'),
     concat      = require('gulp-concat'),
@@ -12,11 +13,20 @@ var gulp        = require('gulp'),
     stylish     = require('jshint-stylish'),
     chalk       = require('chalk');
 
+// TODO: Make a map structure for these
+var js_deps = ['deps/jquery/jquery-1.11.1.min.js',
+               'deps/bootstrap-sass/assets/javascripts/bootstrap.js'];
+
 // If true, then we generate a production build output
 var isProduction = false;
 
 gulp.task('gen_html', function() {
-   return gulp.src(['build/*.js', 'build/*.css'], {read: false})
+   // XXX: there is an ordering issue here with the deps
+   return gulp.src(['build/js_deps/jquery*.js',
+                    'build/js_deps/*.js', 
+                    'build/*.js', 
+                    'build/*.css'], 
+                   {read: false})
               //.pipe(debug({title: 'html_inject'}))
               .pipe(inject('src/index.html',
                  { 
@@ -33,9 +43,14 @@ gulp.task('clean', function() {
 });
 
 gulp.task('scripts', function() {
-   return gulp.src('src/js/**/*.js')
-              .pipe(concat('test_app.js'))
-              .pipe(gulp.dest('build'));
+   // Build and install application scripts and dependency scripts
+   var app_stream = gulp.src('src/js/**/*.js')
+           .pipe(concat('test_app.js'))
+           .pipe(gulp.dest('build'));
+   var lib_stream = gulp.src(js_deps)
+           .pipe(gulp.dest('build/js_deps'));
+
+   return es.merge(app_stream, lib_stream);
 });
 
 gulp.task('style', function() {
@@ -45,7 +60,8 @@ gulp.task('style', function() {
                 sass: 'src/scss',
                 time: true,
                 style: (isProduction? 'compressed' : 'nested'),
-                comments: !isProduction
+                comments: !isProduction,
+                import_path: ['deps/bootstrap-sass/assets/stylesheets']
               }))
               .pipe(gulp.dest('build'));
 });

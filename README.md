@@ -4,18 +4,18 @@ App:
  - DONE: Phase 1
    - Simple page with some basic interaction
    - gulp: hmtl copy, clean, concat, jshint, css gen, html template gen
- - Phase 2
+ - DONE: Phase 2
    - Use bootstrap (SASS) for styling
    - gulp: compass extensions
  - Phase 3
-   - JS code spread across multiple directories
-   - gulp: concat, watch, uglify, dev vs prod
- - Phase 4
-   - test specs to come in
-   - gulp: karma, coverage, ci, debugging
- - Phase 5
    - browserify
    - Use browserify with commonjs way of getting deps
+ - Phase 4
+   - JS code spread across multiple directories
+   - gulp: concat, watch, uglify, dev vs prod
+ - Phase 5
+   - test specs to come in
+   - gulp: karma, coverage, ci, debugging
  - Phase 6
    - multiple pages to get loaded (index.html, other.html, etc)
      - separate source for each
@@ -28,18 +28,17 @@ App:
 
 Todo:
 - jshint
-  - configuration file for jshint
   - only check changed files
-  - jshint-stylish
-- put js and css into html template for index.html
-- concat of files
-- module support
-  - browserfy ?
+- module support: browserify
+  - app js code
+  - deps ???
+  - get deps ordering correct
+    - idea: use concat on deps libraries in correct order
+            and then modules for the apps files.
 - uglification
-- compass for css
-  - output style vary by production vs dev
-  - import paths
-- watch everything
+- Incremental builds
+   - watch everything
+   - only build / run what is needed
 - use karma for testing
   - Use phantomjs and or chrome
   - reporter for ci testing
@@ -53,6 +52,8 @@ Todo:
   - manage deps for angular with npm or other?
   - angular ui
   - angular ui bootstrap
+
+
 
 Done:
 - clean
