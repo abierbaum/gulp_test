@@ -20,10 +20,10 @@
     "gulp-util": "~2.2.19",
     "pretty-hrtime": "~0.2.1",
     "browserify-shim": "~3.6.0",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "jquery": "~2.1.1"
   },
   "browser": {
-    "jquery": "./deps/jquery/jquery-1.11.1.min.js",
     "bootstrap": "./deps/bootstrap-sass/assets/javascripts/bootstrap.js"
   },
   "browserify": {
@@ -32,12 +32,9 @@
     ]
   },
   "browserify-shim": {
-    "jquery": {
-      "exports": "$"
-    },
     "bootstrap": {
       "depends": [
-        "jquery"
+        "jquery:jQuery"
       ]
     }
   }
