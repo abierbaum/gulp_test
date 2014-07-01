@@ -18,6 +18,18 @@
     "watchify": "~0.10.2",
     "vinyl-source-stream": "~0.1.1",
     "gulp-util": "~2.2.19",
-    "pretty-hrtime": "~0.2.1"
+    "pretty-hrtime": "~0.2.1",
+    "browserify-shim": "~3.6.0"
+  },
+  "browser": {
+    "jquery": "./deps/jquery/jquery-1.11.1.min.js",
+    "bootstrap": "./deps/bootstrap-sass/assets/javascripts/bootstrap.js"
+  },
+  "browserify": {
+    "transform": [ "browserify-shim" ]
+  },
+  "browserify-shim": {
+    "jquery": { "exports": "$" },
+    "bootstrap" : { "depends": [ "jquery" ] }
   }
 }

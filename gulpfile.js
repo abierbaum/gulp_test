@@ -74,8 +74,8 @@ gulp.task('scripts', function() {
                     .on('end', bundleLogger.end);
    };
 
+   // rebundle with watchify on changes
    if(using_watch) {
-      // rebundle with watchify on changes
       bundler.on('update', bundle);
    }
 
