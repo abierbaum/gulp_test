@@ -1,6 +1,8 @@
 /* jshint node: true */
 "use strict";
 
+//process.env.BROWSERIFYSHIM_DIAGNOSTICS=1;
+
 var gulp        = require('gulp'),
 
     //es          = require('event-stream'),
@@ -18,7 +20,8 @@ var gulp        = require('gulp'),
     browserify  = require('browserify'),
     watchify    = require('watchify'),
     stylish     = require('jshint-stylish'),
-    chalk       = require('chalk');
+    chalk       = require('chalk'),
+    _           = require('lodash');
 
 // TODO: Make a map structure for these
 //var js_deps = ['deps/jquery/jquery-1.11.1.min.js',
@@ -29,8 +32,7 @@ var isProduction = false;
 
 gulp.task('gen_html', function() {
    // XXX: there is an ordering issue here with the deps
-   return gulp.src(['build/js_deps/jquery*.js',
-                    'build/js_deps/*.js', 
+   return gulp.src(['build/lib_deps.js',
                     'build/*.js', 
                     'build/*.css'], 
                    {read: false})
@@ -50,45 +52,72 @@ gulp.task('clean', function() {
 });
 
 gulp.task('scripts', function() {
-   var bundleLogger = require('./gulp_helpers/bundleLogger');
-       
    // Build up a browserify stream of all the files
-   // TODO: Split the library files out
-   var using_watch = false;
+   var bundleLogger = require('./gulp_helpers/bundleLogger'),
+       app_logger   = _.bindAll(bundleLogger('app.js')),
+       //lib_logger   = _.bindAll(bundleLogger('lib_deps.js')),
+       using_watch  = false,
+       bundleMethod = using_watch ? watchify : browserify;
 
-   var bundleMethod = using_watch ? watchify : browserify;
-
-   // see options for browserify
-   var bundler = bundleMethod({
+   // --- Bundle Application Files --- //
+   // Setup the bundler to run
+   var app_bundler = bundleMethod({
       entries: ['./src/js/app.js']
    });
+   /*
+   // list of dependencies (using their require() names)
+   var deps = ['bootstrap', 'jquery'];
+   _.forEach(deps, function(dep) {
+      app_bundler.external(dep);
+   });
+   */
 
-   var bundle = function() {
-      bundleLogger.start();    // log the start of bundling
+   var app_bundle = function() {
+      app_logger.start();    // log the start of bundling
 
-      return bundler.bundle({ debug: !isProduction })
+      return app_bundler.bundle({ debug: !isProduction })
                     // report compile errors (note: may be issue here)
                     .on('error', util.log)
                     .pipe(source('app.js'))
                     .pipe(gulp.dest('build'))
-                    .on('end', bundleLogger.end);
+                    .on('end', app_logger.end);
    };
 
    // rebundle with watchify on changes
    if(using_watch) {
-      bundler.on('update', bundle);
+      app_bundler.on('update', app_bundle);
    }
 
-   return bundle();
+   return app_bundle();
+
+   // --- Bundle Deps Library Files --- //
+   // TODO: Get this working
+   //   see:
+   //     - https://github.com/thlorenz/browserify-shim/issues/40
+   //     - https://github.com/ryan-kimber/multi-browserify
+   //  next step: create example repo of exact problem and send issue report/request
+   /*
+   var lib_bundler = bundleMethod({});
+   _.forEach(deps, function(dep) {
+      lib_bundler.require(dep);
+   });
+
+   var lib_bundle = function() {
+      lib_logger.start();
+      return lib_bundler.bundle({ debug: !isProduction })
+                        .on('error', util.log)
+                        .pipe(source('lib_deps.js'))
+                        .pipe(gulp.dest('build'))
+                        .on('end', lib_logger.end);
+   };
+   if(using_watch) {
+      lib_bundler.on('update', lib_bundle);
+   }
    
-   // Build and install application scripts and dependency scripts
-   //var app_stream = gulp.src('src/js/**/*.js')
-   //        .pipe(concat('test_app.js'))
-   //        .pipe(gulp.dest('build'));
-   //var lib_stream = gulp.src(js_deps)
-   //        .pipe(gulp.dest('build/js_deps'));
-   //
-   //return es.merge(app_stream, lib_stream);
+   // return both streams merged
+   return es.merge(app_bundle(), lib_bundle());
+   */
+   
 });
 
 gulp.task('style', function() {

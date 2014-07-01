@@ -7,15 +7,23 @@ var gutil        = require('gulp-util');
 var prettyHrtime = require('pretty-hrtime');
 var startTime;
 
-module.exports = {
-	start: function() {
-		startTime = process.hrtime();
-		gutil.log('Running', gutil.colors.green("'bundle'") + '...');
-	},
+function BundleLogger(name) {
+   if (!(this instanceof BundleLogger)) { 
+      return new BundleLogger(name); 
+   }
+   this.name      = name;
+   this.startTime = null;
+}
 
-	end: function() {
-		var taskTime = process.hrtime(startTime);
-		var prettyTime = prettyHrtime(taskTime);
-		gutil.log('Finished', gutil.colors.green("'bundle'"), 'in', gutil.colors.magenta(prettyTime));
-	}
-};
+BundleLogger.prototype.start = function() {
+   this.startTime = process.hrtime();
+   gutil.log('Running', gutil.colors.green("'bundle' - " + this.name) + '...');
+}
+
+BundleLogger.prototype.end = function() {
+	var taskTime = process.hrtime(this.startTime);
+	var prettyTime = prettyHrtime(taskTime);
+	gutil.log('Finished', gutil.colors.green("'bundle' - " + this.name), ' in', gutil.colors.magenta(prettyTime));
+}
+
+module.exports = BundleLogger;
