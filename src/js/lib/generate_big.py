@@ -1,4 +1,4 @@
-num_items = 10000
+num_items = 100
 
 function_blocks = ["""
    blah_%s: function() {
@@ -12,5 +12,6 @@ module.exports = {
 };
 """ % ",".join(function_blocks)
 
-open('big.js', 'w').write(full_text)
+for fname in ['big1.js', 'big2.js', 'big3.js']:
+   open(fname, 'w').write(full_text)
 

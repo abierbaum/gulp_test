@@ -22,9 +22,10 @@ App:
  - DONE: Phase 4
    - Production build
    - gulp: uglify, dev vs prod
- - Phase 5
+ - DONE: Phase 5
    - Incremental builds (do less work)
    - watch, changed, etc
+   - browserify changes
    - scss, js file build, html files, linting
  - Phase 6
    - test specs to come in

@@ -33,6 +33,8 @@ var gulp        = require('gulp'),
 
 // If true, then we generate a production build output
 var isProduction = false;
+// If true, then we are using a watching build
+var isWatching   = false;
 
 gulp.task('gen_html', function() {
    // XXX: there is an ordering issue here with the deps
@@ -60,8 +62,7 @@ gulp.task('scripts', function() {
    var bundleLogger = require('./gulp_helpers/bundleLogger'),
        app_logger   = _.bindAll(bundleLogger('app.js')),
        //lib_logger   = _.bindAll(bundleLogger('lib_deps.js')),
-       using_watch  = false,
-       bundleMethod = using_watch ? watchify : browserify;
+       bundleMethod = isWatching ? watchify : browserify;
 
    // --- Bundle Application Files --- //
    // Setup the bundler to run
@@ -89,7 +90,7 @@ gulp.task('scripts', function() {
    };
 
    // rebundle with watchify on changes
-   if(using_watch) {
+   if(isWatching) {
       app_bundler.on('update', app_bundle);
    }
 
@@ -168,6 +169,7 @@ gulp.task('watch', ['build'], function() {
    /** Note: could really just watch everything and run 'build' for all of them
    *         since all build tasks minimize the work they try to do.
    */
+   isWatching = true;
    var watchers = [
       gulp.watch('src/scss/**', ['style']),
       gulp.watch(['!src/js/node_modules/**', 'src/js/**/*.js'], ['build']),
@@ -190,6 +192,10 @@ gulp.task('production', function(cb) {
    isProduction = true;
    runSequence('clean', 'build',
                cb);
+});
+
+gulp.task('test', function(cb) {
+   runSequence('clean', 'build');
 });
 
 gulp.task('default', function(cb) {

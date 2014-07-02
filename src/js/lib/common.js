@@ -10,7 +10,7 @@ var _ = require('lodash'),
 module.exports = {
 
    printStuff: function() {
-      console.log('some stuff here');
+      console.log('some stuff');
 
       var print_it = false;
       if(print_it) {
