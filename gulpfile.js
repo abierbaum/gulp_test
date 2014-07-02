@@ -10,8 +10,11 @@ var gulp        = require('gulp'),
     compass     = require('gulp-compass'),
     //concat      = require('gulp-concat'),
     //debug       = require('gulp-debug'),
+    gulpif      = require('gulp-if'),
     inject      = require('gulp-inject'),
     jshint      = require('gulp-jshint'),
+    streamify   = require('gulp-streamify'),
+    uglify      = require('gulp-uglify'),
     util        = require('gulp-util'),
 
     runSequence = require('run-sequence'),
@@ -79,6 +82,7 @@ gulp.task('scripts', function() {
                     // report compile errors (note: may be issue here)
                     .on('error', util.log)
                     .pipe(source('app.js'))
+                    .pipe(gulpif(isProduction, streamify(uglify())))
                     .pipe(gulp.dest('build'))
                     .on('end', app_logger.end);
    };

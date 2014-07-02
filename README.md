@@ -14,16 +14,17 @@ App:
  - DONE: Phase 2
    - Use bootstrap (SASS) for styling
    - gulp: compass extensions
- - Phase 3
+ - DONE: Phase 3
    - browserify
    - Use browserify with commonjs way of getting deps
    - get in jquery and bootstrap (external or included?)
    - check debugging (source maps??)
- - Phase 4
-   - JS code spread across multiple directories
-   - gulp: concat, watch, uglify, dev vs prod
+ - DONE: Phase 4
+   - Production build
+   - gulp: uglify, dev vs prod
  - Phase 5
    - Incremental builds (do less work)
+   - watch, changed, etc
  - Phase 6
    - test specs to come in
    - gulp: karma, coverage, ci, debugging
@@ -36,6 +37,8 @@ App:
    - angular support for interaction and doing stuff (add item to page from text box)
    - gulp: angular deps, angular ui, angular bootstrap
 
+ - Future
+   - Browserify into lib and app bundles
 
 Todo:
 - jshint
