@@ -6,6 +6,7 @@
 var gulp        = require('gulp'),
 
     //es          = require('event-stream'),
+    cache       = require('gulp-cached'),
     clean       = require('gulp-rimraf'),
     compass     = require('gulp-compass'),
     //concat      = require('gulp-concat'),
@@ -126,21 +127,25 @@ gulp.task('scripts', function() {
 
 gulp.task('style', function() {
    return gulp.src('src/scss/*.scss')
+              .pipe(cache('style'))
               .pipe(compass({
-                css: 'build',
-                sass: 'src/scss',
-                time: true,
-                style: (isProduction? 'compressed' : 'nested'),
-                comments: !isProduction,
-                sourcemap: !isProduction,
-                import_path: ['deps/bootstrap-sass/assets/stylesheets']
+                css   : 'build',
+                sass  : 'src/scss',
+                time  : true,
+                style       : (isProduction? 'compressed' : 'nested'),
+                comments    : !isProduction,
+                sourcemap   : !isProduction,
+                import_path : ['deps/bootstrap-sass/assets/stylesheets']
               }))
               .pipe(gulp.dest('build'));
 });
 
 gulp.task('lint', function() {
-   return gulp.src(['src/js/**/*.js',
+   return gulp.src(['!src/js/node_modules/**',
+                    'src/js/**/*.js',
                     'gulpfile.js'])
+              .pipe(cache('jshint'))
+              //.pipe(debug({title: 'jshint'}))
               .pipe(jshint('jshintrc'))
               .pipe(jshint.reporter(stylish))
               .pipe(jshint.reporter('fail'));
@@ -152,11 +157,27 @@ gulp.task('build', function(cb) {
                chalk.green.bold( (isProduction ? 'PRODUCTION' : 'DEV') ));
    
    runSequence('lint',
-               'clean',
                'scripts',
                'style',
                'gen_html',
                cb);
+});
+
+
+gulp.task('watch', ['build'], function() {
+   /** Note: could really just watch everything and run 'build' for all of them
+   *         since all build tasks minimize the work they try to do.
+   */
+   var watchers = [
+      gulp.watch('src/scss/**', ['style']),
+      gulp.watch(['!src/js/node_modules/**', 'src/js/**/*.js'], ['build']),
+      gulp.watch('src/index.html', ['gen_html'])
+   ];
+   _.forEach(watchers, function(watcher) {
+      watcher.on('change', function(event) {
+         console.log('File ' + chalk.blue.bold(event.path) + ' was ' + chalk.blue.bold(event.type));
+      });
+   });
 });
 
 
@@ -167,11 +188,15 @@ gulp.task('build', function(cb) {
 */
 gulp.task('production', function(cb) {
    isProduction = true;
-   runSequence('build',
+   runSequence('clean', 'build',
                cb);
 });
 
-gulp.task('default', ['build']);
+gulp.task('default', function(cb) {
+   runSequence('clean', 'watch',
+               cb);
+});
+
 
 
 

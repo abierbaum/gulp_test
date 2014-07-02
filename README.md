@@ -25,6 +25,7 @@ App:
  - Phase 5
    - Incremental builds (do less work)
    - watch, changed, etc
+   - scss, js file build, html files, linting
  - Phase 6
    - test specs to come in
    - gulp: karma, coverage, ci, debugging
@@ -41,24 +42,17 @@ App:
    - Browserify into lib and app bundles
 
 Todo:
-- jshint
-  - only check changed files
+- Fix up node_modules setup to work cross-platform (and better)
 - module support: browserify
   - app js code
   - deps ???
   - get deps ordering correct
     - idea: use concat on deps libraries in correct order
             and then modules for the apps files.
-- uglification
-- Incremental builds
-   - watch everything
-   - only build / run what is needed
 - use karma for testing
   - Use phantomjs and or chrome
   - reporter for ci testing
   - coverage reporting (istanbul?)
-- debugging build
-  - source maps
 - bringing in multiple deps trees (including css and prod/dev js files)
 - multiple "apps" coming from same dependencies
 - live reloading of application (syncing)

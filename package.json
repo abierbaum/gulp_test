@@ -25,7 +25,9 @@
     "http-server": "~0.6.1",
     "gulp-if": "~1.2.1",
     "gulp-uglify": "~0.3.1",
-    "gulp-streamify": "0.0.5"
+    "gulp-streamify": "0.0.5",
+    "gulp-watch": "~0.6.8",
+    "gulp-cached": "0.0.3"
   },
   "browser": {
     "bootstrap": "./deps/bootstrap-sass/assets/javascripts/bootstrap.js"
