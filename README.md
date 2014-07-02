@@ -1,4 +1,11 @@
-Just random testing of gulp.  Ignore.
+Installation
+------------
+> npm install
+> gem install --pre compass
+
+
+Capabilities
+------------
 
 App:
  - DONE: Phase 1

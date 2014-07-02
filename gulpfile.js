@@ -128,6 +128,7 @@ gulp.task('style', function() {
                 time: true,
                 style: (isProduction? 'compressed' : 'nested'),
                 comments: !isProduction,
+                sourcemap: !isProduction,
                 import_path: ['deps/bootstrap-sass/assets/stylesheets']
               }))
               .pipe(gulp.dest('build'));

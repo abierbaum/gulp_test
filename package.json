@@ -21,7 +21,8 @@
     "pretty-hrtime": "~0.2.1",
     "browserify-shim": "~3.6.0",
     "lodash": "~2.4.1",
-    "jquery": "~2.1.1"
+    "jquery": "~2.1.1",
+    "http-server": "~0.6.1"
   },
   "browser": {
     "bootstrap": "./deps/bootstrap-sass/assets/javascripts/bootstrap.js"
@@ -37,5 +38,8 @@
         "jquery:jQuery"
       ]
     }
+  },
+  "scripts": {
+    "start": "http-server ./"
   }
 }
